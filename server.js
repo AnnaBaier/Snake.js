@@ -1,12 +1,14 @@
-var http = require('https');
-var express = require('express');
+const express = require('express');
 
-var app = express;
+const app = express();
 
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-  });
+/* app.use((req, res, next) => {
+    console.log(`Incoming Request: ${req.url}`);
+    next();
+}) */
+
+app.use('/', express.static(`${__dirname}/public`))
   
-  app.listen(80, function () {
-    console.log('Snake is listening on localhost!');
-  });
+app.listen(80, function () {
+console.log('Snake is listening on localhost!');
+});
