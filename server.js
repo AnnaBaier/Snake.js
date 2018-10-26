@@ -1,14 +1,21 @@
 const express = require('express');
+const database = require('./database');
 
-const app = express();
+(async () => {
+    const app = express();
 
-app.use((req, res, next) => {
-    console.log(`Incoming Request: ${req.url}`);
-    next();
-});
+    await database.getConnection();
 
-app.use('/', express.static(`${__dirname}/public`));
-  
-app.listen(80, function () {
-console.log('Snake is listening on localhost!');
-});
+    app.use((req, res, next) => {
+        console.log(`Incoming Request: ${req.url}`);
+        next();
+    });
+
+    app.use('/', express.static(`${__dirname}/public`));
+
+    app.listen(80, function () {
+        console.log('Snake is listening on localhost!');
+    });
+})();
+
+

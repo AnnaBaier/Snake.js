@@ -1,0 +1,17 @@
+version: '3'
+services:
+  snake:
+    build: .
+    ports:
+      - "80:80"
+  db:
+    image: postgres
+    hostname: ${postgresHostname}
+    ports: 
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${postgresPassword}
+      POSTGRES_USER: ${postgresUser}
+      POSTGRES_DB: ${postgresDB}
+    volumes: 
+      - "./pgdata:/var/lib/postgresql/data"
