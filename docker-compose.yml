@@ -1,17 +1,28 @@
 version: '3'
+networks:
+  proxy: 
+    external: true
+  snake: null
 services:
   snake:
     build: .
-    ports:
-      - "3000:80"
+    labels:
+      - traefik.backend=snake
+      - "traefik.frontend.redirect.regex=^(.*)/snake$$"
+      - "traefik.frontend.redirect.replacement=$$1/snake/"
+      - "traefik.frontend.rule=Host:annabaier.de; PathPrefix:/snake; ReplacePathRegex:^/snake/(.*) /$$1"
+      - traefik.port=80
+    networks:
+      - proxy
+      - snake
   db:
     image: postgres
     hostname: ${postgresHostname}
-    ports: 
-      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: ${postgresPassword}
       POSTGRES_USER: ${postgresUser}
       POSTGRES_DB: ${postgresDB}
     volumes: 
       - "./pgdata:/var/lib/postgresql/data"
+    networks:
+      - snake
